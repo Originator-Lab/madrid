@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Дорога в Мадрид — Originator Lab</title>
+  <meta name="description" content="Открытый эксперимент Originator Lab: с 20 000 ₽ до 500 000 ₽ на финал Лиги чемпионов в Мадрид (5 июня 2027)." />
+  <style>
+    :root {
+      --bg: #000000;
+      --card: #161618;
+      --card-2: #1f1f23;
+      --card-3: #28282e;
+      --text: #ffffff;
+      --sub: #8e8e93;
+      --accent: #6c7bff;
+      --accent-2: #4e7bf5;
+      --green: #34c759;
+      --green-soft: rgba(52, 199, 89, 0.14);
+      --red: #ff453a;
+      --red-soft: rgba(255, 69, 58, 0.14);
+      --amber: #ff9f0a;
+      --amber-soft: rgba(255, 159, 10, 0.14);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Roboto", sans-serif;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding-bottom: 108px;
+    }
+
+    /* Sofascore-style Match Header */
+    .hero-header {
+      background: linear-gradient(180deg, #1d1e2b 0%, #111116 70%, #000000 100%);
+      padding: 18px 16px 14px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .app-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-pill {
+      font-size: 11px;
+      font-weight: 700;
+      color: #ffffff;
+      background: rgba(108, 123, 255, 0.22);
+      border: 1px solid rgba(108, 123, 255, 0.4);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .icon-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Scoreboard Head (like Bayern vs Koln header) */
+    .match-head {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .side-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin: 0 auto 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      background: var(--card-2);
+    }
+
+    .side-circle.orig {
+      background: linear-gradient(135deg, #222638, #171821);
+      border: 1.5px solid rgba(108, 123, 255, 0.55);
+      color: #aeb7ff;
+    }
+
+    .side-circle.madrid {
+      background: linear-gradient(135deg, #27272c, #17171a);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    .side-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .side-sub {
+      font-size: 11px;
+      color: var(--sub);
+      margin-top: 2px;
+    }
+
+    .center-date {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .center-sub {
+      font-size: 12px;
+      color: var(--sub);
+      margin-top: 2px;
+    }
+
+    /* Segmented Pill Switch (like Sofascore МАТЧИ | ЛИГИ) */
+    .seg-control {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #141416;
+      border-radius: 999px;
+      padding: 4px;
+      margin-top: 4px;
+    }
+
+    .seg-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      background: transparent;
+      color: var(--sub);
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .seg-btn.active {
+      background: #ffffff;
+      color: #000000;
+    }
+
+    /* Main Content Padding */
+    .content {
+      padding: 12px 14px 0;
+    }
+
+    .view-panel {
+      display: none;
+    }
+
+    .view-panel.active {
+      display: block;
+    }
+
+    /* Native Dark Cards */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .card-row-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .chip-blue {
+      background: var(--accent);
+      color: #0b0d17;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 10px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .chip-dark {
+      background: var(--card-2);
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 999px;
+    }
+
+    /* Bank Progress */
+    .bank-line {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .bank-now {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .bank-target {
+      font-size: 13px;
+      color: var(--sub);
+      font-weight: 600;
+    }
+
+    .progress-rail {
+      width: 100%;
+      height: 10px;
+      background: var(--card-3);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width 0.4s ease;
+      min-width: 10px;
+    }
+
+    .progress-foot {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .progress-foot strong {
+      color: #ffffff;
+    }
+
+    /* Countdown strip (clean native cells) */
+    .cd-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .cd-box {
+      background: var(--card-2);
+      border-radius: 14px;
+      padding: 10px 4px;
+      text-align: center;
+    }
+
+    .cd-val {
+      font-size: 20px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.1;
+    }
+
+    .cd-lbl {
+      font-size: 11px;
+      color: var(--sub);
+      margin-top: 2px;
+    }
+
+    /* Sofascore Table Row Style */
+    .standings-head {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 12px;
+      font-size: 11px;
+      color: var(--sub);
+      padding: 0 4px 8px;
+    }
+
+    .standings-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 4px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .st-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .st-rank {
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+      background: var(--card-2);
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .st-rank.one {
+      background: rgba(108, 123, 255, 0.22);
+      color: #aeb7ff;
+    }
+
+    .st-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .st-sub {
+      font-size: 11px;
+      color: var(--sub);
+    }
+
+    .st-stat {
+      font-size: 13px;
+      color: var(--sub);
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    .st-pts {
+      font-size: 15px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+      min-width: 78px;
+    }
+
+    /* Telegram Primary Action Card */
+    .tg-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .tg-info-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .tg-info-sub {
+      font-size: 12px;
+      color: var(--sub);
+      margin-top: 2px;
+    }
+
+    .btn-open {
+      background: var(--accent-2);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 999px;
+      text-decoration: none;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-open:hover {
+      opacity: 0.9;
+    }
+
+    .btn-full {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--accent-2);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .btn-sub-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .btn-muted {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      border-radius: 14px;
+      background: var(--card);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Notein-style Colored Filter Chips */
+    .chip-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      overflow-x: auto;
+    }
+
+    .filter-chip {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--card-2);
+      color: var(--sub);
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .filter-chip.active {
+      background: rgba(78, 123, 245, 0.24);
+      color: #7ea3ff;
+    }
+
+    .filter-chip.active[data-filter="originator"] {
+      background: var(--green);
+      color: #ffffff;
+    }
+
+    .filter-chip.active[data-filter="chatgpt"] {
+      background: rgba(255, 159, 10, 0.22);
+      color: #ffb340;
+    }
+
+    /* Preset Chips for Calculator */
+    .preset-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .preset-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 10px 8px;
+      background: var(--card-2);
+      color: var(--sub);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .preset-btn.active {
+      background: #ffffff;
+      color: #000000;
+    }
+
+    .range-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--sub);
+      margin-bottom: 8px;
+    }
+
+    .range-top strong {
+      color: #ffffff;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+      margin-bottom: 14px;
+      cursor: pointer;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .calc-tile {
+      background: var(--card-2);
+      border-radius: 16px;
+      padding: 14px 12px;
+    }
+
+    .calc-tile.good {
+      background: linear-gradient(180deg, rgba(52, 199, 89, 0.14), var(--card-2));
+    }
+
+    .calc-k {
+      font-size: 11px;
+      color: var(--sub);
+      margin-bottom: 6px;
+    }
+
+    .calc-v {
+      font-size: 17px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .calc-tile.good .calc-v {
+      color: var(--green);
+    }
+
+    .calc-d {
+      font-size: 11px;
+      color: var(--sub);
+      margin-top: 4px;
+    }
+
+    /* Smeta & Log Rows */
+    .list-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .list-row:first-child {
+      border-top: none;
+      padding-top: 2px;
+    }
+
+    .list-row:last-child {
+      padding-bottom: 2px;
+    }
+
+    .ms-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+    }
+
+    .ms-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--card-2);
+      color: var(--sub);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .ms-check.done {
+      background: var(--green);
+      color: #000000;
+    }
+
+    .ms-sum {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--sub);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .ms-sum.done {
+      color: var(--green);
+    }
+
+    .log-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .log-sub {
+      font-size: 12px;
+      color: var(--sub);
+      margin-top: 2px;
+    }
+
+    .log-pill {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .pill-win { background: var(--green-soft); color: var(--green); }
+    .pill-loss { background: var(--red-soft); color: var(--red); }
+    .pill-wait { background: var(--amber-soft); color: var(--amber); }
+
+    /* Floating Bottom Pill Nav (exact Sofascore / Telegram / Calendar vibe) */
+    .bottom-dock {
+      position: fixed;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 28px);
+      max-width: 452px;
+      background: rgba(24, 24, 28, 0.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      padding: 6px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      z-index: 50;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65);
+    }
+
+    .dock-btn {
+      border: none;
+      background: transparent;
+      color: var(--sub);
+      border-radius: 999px;
+      padding: 8px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .dock-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .dock-btn.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--accent);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 88px;
+      left: 50%;
+      transform: translateX(-50%) translateY(14px);
+      background: #ffffff;
+      color: #000000;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 100;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Top Sofascore-like Header -->
+    <header class="hero-header">
+      <div class="top-bar">
+        <div class="app-title">
+          <span>Originator Lab</span>
+          <span class="badge-pill" id="dayBadge">Старт 21.11</span>
+        </div>
+        <button type="button" class="icon-btn" id="topShareBtn" aria-label="Поделиться">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Duel / Goal Header -->
+      <div class="match-head">
+        <div>
+          <div class="side-circle orig">20K</div>
+          <div class="side-name">Старт</div>
+          <div class="side-sub">Python v13.3</div>
+        </div>
+        <div>
+          <div class="center-date">05.06.2027</div>
+          <div class="center-sub">Финал ЛЧ • Мадрид</div>
+        </div>
+        <div>
+          <div class="side-circle madrid">500K</div>
+          <div class="side-name">Мадрид</div>
+          <div class="side-sub">Метрополитано</div>
+        </div>
+      </div>
+
+      <!-- Sofascore Segmented Switch -->
+      <div class="seg-control" id="topSwitch">
+        <button type="button" class="seg-btn active" data-view="overview">ОБЗОР</button>
+        <button type="button" class="seg-btn" data-view="journal">ЖУРНАЛ</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <!-- VIEW 1: OVERVIEW -->
+      <div class="view-panel active" id="view-overview">
+        <!-- Bank Progress Card -->
+        <section class="card">
+          <div class="card-row-head">
+            <div class="card-title">Дорога в Мадрид</div>
+            <span class="chip-dark" id="progressPct">4.0%</span>
+          </div>
+          <div class="bank-line">
+            <div class="bank-now" id="currentBankDisplay">20 000 ₽</div>
+            <div class="bank-target">из 500 000 ₽</div>
+          </div>
+          <div class="progress-rail">
+            <div class="progress-bar" id="progressBarFill" style="width: 4%;"></div>
+          </div>
+          <div class="progress-foot">
+            <span>Этап 1: 21.11 – 31.12</span>
+            <span>Осталось: <strong id="remainingDisplay">480 000 ₽</strong></span>
+          </div>
+        </section>
+
+        <!-- Countdown Card -->
+        <section class="card">
+          <div class="card-row-head">
+            <div class="card-title">До финала ЛЧ</div>
+            <span class="chip-dark">5 июня 2027</span>
+          </div>
+          <div class="cd-grid">
+            <div class="cd-box"><div class="cd-val" id="cdDays">--</div><div class="cd-lbl">дней</div></div>
+            <div class="cd-box"><div class="cd-val" id="cdHours">--</div><div class="cd-lbl">часов</div></div>
+            <div class="cd-box"><div class="cd-val" id="cdMins">--</div><div class="cd-lbl">минут</div></div>
+            <div class="cd-box"><div class="cd-val" id="cdSecs">--</div><div class="cd-lbl">секунд</div></div>
+          </div>
+        </section>
+
+        <!-- Standings-style Algorithm Duel -->
+        <section class="card">
+          <div class="card-row-head">
+            <div class="card-title">Таблица ИИ</div>
+            <button type="button" class="chip-blue" id="jumpCalcBtn">Калькулятор</button>
+          </div>
+          <div class="standings-head">
+            <span>Модель</span>
+            <span>Старт</span>
+            <span>Баланс</span>
+          </div>
+          <div class="standings-row">
+            <div class="st-name">
+              <div class="st-rank one">1</div>
+              <div>
+                <div class="st-title">Originator v13.3</div>
+                <div class="st-sub" id="origMeta">Python + Монте-Карло • шаг 6%/3%</div>
+              </div>
+            </div>
+            <div class="st-stat">20 000 ₽</div>
+            <div class="st-pts" id="origBank">20 000 ₽</div>
+          </div>
+          <div class="standings-row">
+            <div class="st-name">
+              <div class="st-rank">2</div>
+              <div>
+                <div class="st-title">Обычный ChatGPT</div>
+                <div class="st-sub" id="gptMeta">Прогнозы в лоб • контроль</div>
+              </div>
+            </div>
+            <div class="st-stat">20 000 ₽</div>
+            <div class="st-pts" id="gptBank">20 000 ₽</div>
+          </div>
+        </section>
+
+        <!-- Telegram CTA Row (like Tribute row in Telegram screenshot) -->
+        <div class="tg-card">
+          <div>
+            <div class="tg-info-title">ИИ против Букмекера</div>
+            <div class="tg-info-sub">Все матчи до старта • Клубы ноября +28.3% ROI</div>
+          </div>
+          <a class="btn-open" href="https://t.me/Originator_lab" target="_blank" rel="noopener noreferrer">Открыть</a>
+        </div>
+
+        <div class="btn-sub-row">
+          <a class="btn-muted" href="https://t.me/originator_manager_bot" target="_blank" rel="noopener noreferrer">
+            Новогодний марафон
+          </a>
+          <button type="button" class="btn-muted" id="shareBtn">
+            Поделиться сайтом
+          </button>
+        </div>
+      </div>
+
+      <!-- VIEW 2: CALCULATOR -->
+      <div class="view-panel" id="view-calc">
+        <section class="card">
+          <div class="card-row-head">
+            <div class="card-title">Этап 1: до Нового года</div>
+            <span class="chip-dark">6 недель</span>
+          </div>
+          <p style="font-size: 13px; color: var(--sub); margin-bottom: 14px;">
+            Сравнение классики 1% и динамического шага 6% / 3% на дистанции ~85–95 клубных матчей (21.11 – 31.12).
+          </p>
+
+          <div class="preset-row" id="presetRow">
+            <button type="button" class="preset-btn" data-val="10000">10 000 ₽</button>
+            <button type="button" class="preset-btn active" data-val="20000">20 000 ₽</button>
+            <button type="button" class="preset-btn" data-val="50000">50 000 ₽</button>
+          </div>
+
+          <div class="range-top">
+            <span>Стартовый банк</span>
+            <strong id="calcBankLabel">20 000 ₽</strong>
+          </div>
+          <input type="range" id="bankRange" min="5000" max="100000" step="5000" value="20000" />
+
+          <div class="calc-grid">
+            <div class="calc-tile">
+              <div class="calc-k">Классика 1%</div>
+              <div class="calc-v" id="calcFlatOut">22 800 ₽</div>
+              <div class="calc-d" id="calcFlatDiff">+2 800 ₽ (~+14%)</div>
+            </div>
+            <div class="calc-tile good">
+              <div class="calc-k">Шаг 6% / 3%</div>
+              <div class="calc-v" id="calcDynOut">40 000 – 46 000 ₽</div>
+              <div class="calc-d" id="calcDynDiff">+20 000 – 26 000 ₽ (+100–130%)</div>
+            </div>
+          </div>
+        </section>
+
+        <a class="btn-full" href="https://t.me/Originator_lab" target="_blank" rel="noopener noreferrer">
+          Перейти в Telegram-канал
+        </a>
+      </div>
+
+      <!-- VIEW 3: SMETA (BUDGET) -->
+      <div class="view-panel" id="view-smeta">
+        <section class="card">
+          <div class="card-row-head">
+            <div class="card-title">Смета: Мадрид 2027</div>
+            <span class="chip-dark">500 000 ₽</span>
+          </div>
+          <div id="milestoneList"></div>
+        </section>
+      </div>
+
+      <!-- VIEW 4: JOURNAL -->
+      <div class="view-panel" id="view-journal">
+        <div class="chip-row" id="logTabs">
+          <button type="button" class="filter-chip active" data-filter="all">Все</button>
+          <button type="button" class="filter-chip" data-filter="originator">Originator</button>
+          <button type="button" class="filter-chip" data-filter="chatgpt">ChatGPT</button>
+        </div>
+
+        <section class="card">
+          <div class="card-row-head">
+            <div class="card-title">Открытый журнал</div>
+            <span class="chip-dark">Без удалений</span>
+          </div>
+          <div id="logList"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Floating Native Bottom Pill Dock -->
+  <nav class="bottom-dock" id="bottomDock">
+    <button type="button" class="dock-btn active" data-view="overview">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+      <span>Обзор</span>
+    </button>
+    <button type="button" class="dock-btn" data-view="calc">
+      <svg viewBox="0 0 24 24"><path d="M3 3v18h18"></path><path d="M18 9l-5 5-4-4-3 3"></path></svg>
+      <span>Расчёт</span>
+    </button>
+    <button type="button" class="dock-btn" data-view="smeta">
+      <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+      <span>Смета</span>
+    </button>
+    <button type="button" class="dock-btn" data-view="journal">
+      <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"></path></svg>
+      <span>Журнал</span>
+    </button>
+  </nav>
+
+  <div class="toast" id="toast">Ссылка скопирована</div>
+
+  <script>
+    const CONFIG = {
+      startBank: 20000,
+      goalBank: 500000,
+      finalDateIso: "2027-06-05T19:00:00Z", // 5 июня 2027, Мадрид, Метрополитано
+      startDateLabel: "Старт 21.11",
+      originatorBank: 20000,
+      chatgptBank: 20000,
+      sheetCsvUrl: "" // Вставь CSV-ссылку из Google Таблиц для автообновления
+    };
+
+    const MILESTONES = [
+      { title: "Стартовый банк зафиксирован", target: 20000 },
+      { title: "Этап 1: Новогодний марафон (x2 к 31.12)", target: 45000 },
+      { title: "Шенгенская виза и страховка", target: 90000 },
+      { title: "Авиабилеты в Мадрид туда-обратно", target: 190000 },
+      { title: "Отель в Мадриде (4 ночи)", target: 310000 },
+      { title: "Билет на «Метрополитано» + расходы", target: 500000 }
+    ];
+
+    let MATCH_LOG = [
+      {
+        date: "21.11",
+        engine: "originator",
+        match: "Топ-лиги Европы (Тур 1)",
+        pick: "Старт 1-го этапа: АПЛ, Ла Лига, Бундеслига",
+        delta: "Ждём старт",
+        status: "wait"
+      },
+      {
+        date: "21.11",
+        engine: "chatgpt",
+        match: "Контрольная группа ChatGPT",
+        pick: "Старт с равного банка 20 000 ₽",
+        delta: "Ждём старт",
+        status: "wait"
+      },
+      {
+        date: "01–17.11",
+        engine: "originator",
+        match: "База ноября (35 ставок)",
+        pick: "Клубы +5.95 флэта (ROI +28.3%) • Общий +4.53",
+        delta: "+16.8% ROI",
+        status: "win"
+      }
+    ];
+
+    let activeFilter = "all";
+
+    function fmtRub(n) {
+      return Math.round(n).toLocaleString("ru-RU") + " ₽";
+    }
+
+    function switchView(viewName) {
+      document.querySelectorAll(".view-panel").forEach((p) => {
+        p.classList.toggle("active", p.id === "view-" + viewName);
+      });
+      document.querySelectorAll(".dock-btn").forEach((b) => {
+        b.classList.toggle("active", b.dataset.view === viewName);
+      });
+      document.querySelectorAll("#topSwitch .seg-btn").forEach((b) => {
+        b.classList.toggle("active", b.dataset.view === viewName);
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function updateCountdown() {
+      const diff = Math.max(0, new Date(CONFIG.finalDateIso).getTime() - Date.now());
+      document.getElementById("cdDays").textContent = String(Math.floor(diff / 86400000));
+      document.getElementById("cdHours").textContent = String(Math.floor((diff / 3600000) % 24)).padStart(2, "0");
+      document.getElementById("cdMins").textContent = String(Math.floor((diff / 60000) % 60)).padStart(2, "0");
+      document.getElementById("cdSecs").textContent = String(Math.floor((diff / 1000) % 60)).padStart(2, "0");
+    }
+
+    function renderStats() {
+      const current = CONFIG.originatorBank;
+      const pct = Math.min(100, Math.max(0, (current / CONFIG.goalBank) * 100));
+      const remaining = Math.max(0, CONFIG.goalBank - current);
+
+      document.getElementById("dayBadge").textContent = CONFIG.startDateLabel;
+      document.getElementById("currentBankDisplay").textContent = fmtRub(current);
+      document.getElementById("progressBarFill").style.width = pct.toFixed(1) + "%";
+      document.getElementById("progressPct").textContent = pct.toFixed(1) + "%";
+      document.getElementById("remainingDisplay").textContent = fmtRub(remaining);
+      document.getElementById("origBank").textContent = fmtRub(CONFIG.originatorBank);
+      document.getElementById("gptBank").textContent = fmtRub(CONFIG.chatgptBank);
+
+      document.getElementById("milestoneList").innerHTML = MILESTONES.map((m) => {
+        const done = current >= m.target;
+        return `
+          <div class="list-row">
+            <div class="ms-left">
+              <span class="ms-check ${done ? "done" : ""}">${done ? "✓" : ""}</span>
+              <span>${m.title}</span>
+            </div>
+            <span class="ms-sum ${done ? "done" : ""}">${fmtRub(m.target)}</span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderLog() {
+      const items = MATCH_LOG.filter((i) => activeFilter === "all" || i.engine === activeFilter);
+      const container = document.getElementById("logList");
+      if (!items.length) {
+        container.innerHTML = `<div class="list-row"><div class="log-sub">Записей пока нет.</div></div>`;
+        return;
+      }
+      container.innerHTML = items.map((i) => {
+        const cls = i.status === "win" ? "pill-win" : i.status === "loss" ? "pill-loss" : "pill-wait";
+        const eng = i.engine === "originator" ? "Originator" : "ChatGPT";
+        return `
+          <div class="list-row">
+            <div>
+              <div class="log-title">${i.match}</div>
+              <div class="log-sub">${i.date} • ${eng} • ${i.pick}</div>
+            </div>
+            <span class="log-pill ${cls}">${i.delta}</span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function updateCalculator(bank) {
+      const flatProfit = bank * 0.14;
+      document.getElementById("calcBankLabel").textContent = fmtRub(bank);
+      document.getElementById("calcFlatOut").textContent = fmtRub(bank + flatProfit);
+      document.getElementById("calcFlatDiff").textContent = "+" + fmtRub(flatProfit) + " (~+14%)";
+      document.getElementById("calcDynOut").textContent =
+        Math.round(bank * 2).toLocaleString("ru-RU") + " – " + fmtRub(bank * 2.3);
+      document.getElementById("calcDynDiff").textContent =
+        "+" + Math.round(bank).toLocaleString("ru-RU") + " – " + fmtRub(bank * 1.3) + " (+100–130%)";
+
+      document.querySelectorAll(".preset-btn").forEach((btn) => {
+        btn.classList.toggle("active", Number(btn.dataset.val) === Number(bank));
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+
+    function copyPageLink() {
+      const url = window.location.href.startsWith("http")
+        ? window.location.href
+        : "https://t.me/Originator_lab";
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => showToast("Ссылка скопирована")).catch(() => fallbackCopy(url));
+      } else {
+        fallbackCopy(url);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+        showToast("Ссылка скопирована");
+      } catch (e) {
+        showToast("Скопируй ссылку из адресной строки");
+      }
+      document.body.removeChild(ta);
+    }
+
+    async function loadGoogleSheetIfConfigured() {
+      if (!CONFIG.sheetCsvUrl) return;
+      try {
+        const res = await fetch(CONFIG.sheetCsvUrl);
+        if (!res.ok) return;
+        const rows = (await res.text()).trim().split("\n").slice(1);
+        const parsed = [];
+        rows.forEach((line) => {
+          const cols = line.split(",").map((c) => c.trim());
+          if (cols.length >= 6) {
+            parsed.push({
+              date: cols[0],
+              engine: cols[1].toLowerCase(),
+              match: cols[2],
+              pick: cols[3],
+              delta: cols[4],
+              status: cols[5].toLowerCase()
+            });
+          }
+        });
+        if (parsed.length) {
+          MATCH_LOG = parsed;
+          renderLog();
+        }
+      } catch (err) {
+        // Fallback to built-in data
+      }
+    }
+
+    document.getElementById("bottomDock").addEventListener("click", (e) => {
+      const btn = e.target.closest(".dock-btn");
+      if (!btn) return;
+      switchView(btn.dataset.view);
+    });
+
+    document.getElementById("topSwitch").addEventListener("click", (e) => {
+      const btn = e.target.closest(".seg-btn");
+      if (!btn) return;
+      switchView(btn.dataset.view);
+    });
+
+    document.getElementById("jumpCalcBtn").addEventListener("click", () => switchView("calc"));
+
+    document.getElementById("presetRow").addEventListener("click", (e) => {
+      const btn = e.target.closest(".preset-btn");
+      if (!btn) return;
+      const val = Number(btn.dataset.val);
+      document.getElementById("bankRange").value = val;
+      updateCalculator(val);
+    });
+
+    document.getElementById("bankRange").addEventListener("input", (e) => {
+      updateCalculator(Number(e.target.value));
+    });
+
+    document.getElementById("logTabs").addEventListener("click", (e) => {
+      const btn = e.target.closest(".filter-chip");
+      if (!btn) return;
+      activeFilter = btn.dataset.filter;
+      document.querySelectorAll(".filter-chip").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderLog();
+    });
+
+    document.getElementById("shareBtn").addEventListener("click", copyPageLink);
+    document.getElementById("topShareBtn").addEventListener("click", copyPageLink);
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    renderStats();
+    updateCalculator(20000);
+    renderLog();
+    loadGoogleSheetIfConfigured();
+  </script>
+</body>
+</html>
