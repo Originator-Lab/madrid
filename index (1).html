@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Дорога в Мадрид — Originator Lab</title>
+  <meta name="description" content="Открытый эксперимент Originator Lab: с 20 000 ₽ до 500 000 ₽ на футбольной математике к финалу Лиги чемпионов 5 июня 2027 в Мадриде." />
+  <meta name="theme-color" content="#0D1B35" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <meta property="og:title" content="Дорога в Мадрид — Originator Lab" />
+  <meta property="og:description" content="С 20 000 ₽ до 500 000 ₽ на футбольной математике · Финал ЛЧ 5 июня 2027" />
+  <meta property="og:image" content="https://originator-lab.github.io/madrid/hero.jpg" />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy-deep: #0D1B35;
+      --navy-mid: #162A5A;
+      --navy-accent: #23429A;
+      --navy-soft: #EBF0FA;
+      --surface: #F6F7F9;
+      --card: #FFFFFF;
+      --card-muted: #EFF2F6;
+      --border: #E4E7EC;
+      --text: #111827;
+      --text-2: #4B5563;
+      --text-3: #6B7280;
+      --green: #15803D;
+      --green-bg: #DCFCE7;
+      --red: #B91C1C;
+      --red-bg: #FEE2E2;
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--navy-deep);
+    }
+
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Roboto", sans-serif;
+      background: var(--navy-deep);
+      color: var(--text);
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .page-shell {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--surface);
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.35);
+      position: relative;
+    }
+
+    /* ==================== HERO ==================== */
+    .hero {
+      position: relative;
+      background-color: var(--navy-deep);
+      background-image:
+        linear-gradient(180deg, rgba(13, 27, 53, 0.72) 0%, rgba(13, 27, 53, 0.25) 38%, rgba(13, 27, 53, 0.12) 68%, rgba(13, 27, 53, 0.85) 100%),
+        url("hero.jpg");
+      background-position: center 72%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      color: #FFFFFF;
+      padding: calc(env(safe-area-inset-top, 0px) + 22px) 20px 218px;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.68);
+      margin-bottom: 10px;
+    }
+
+    .hero-title {
+      font-family: "Oswald", "Arial Narrow", -apple-system, sans-serif;
+      font-size: clamp(42px, 12.2vw, 54px);
+      font-weight: 700;
+      line-height: 0.98;
+      letter-spacing: 0.015em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      text-shadow: 0 4px 24px rgba(8, 17, 36, 0.45);
+      margin-bottom: 10px;
+    }
+
+    .hero-sub {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.84);
+      margin-bottom: 16px;
+    }
+
+    .countdown-bar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 15px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.11);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.92);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cd-num {
+      font-family: "Oswald", -apple-system, sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #FFFFFF;
+      letter-spacing: 0.02em;
+    }
+
+    .cd-unit {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.72);
+      margin-left: 1px;
+    }
+
+    .cd-sep {
+      color: rgba(255, 255, 255, 0.45);
+      font-weight: 600;
+    }
+
+    .cd-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.78);
+      margin-left: 2px;
+    }
+
+    /* ==================== MAIN SHEET ==================== */
+    .main-sheet {
+      position: relative;
+      z-index: 2;
+      margin-top: -34px;
+      background: var(--surface);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      padding: 22px 18px 40px;
+    }
+
+    .hero-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 20px 18px 18px;
+      box-shadow: 0 8px 28px rgba(13, 27, 53, 0.06);
+      margin-bottom: 16px;
+    }
+
+    .bank-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .bank-figures {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .bank-value {
+      font-family: "Oswald", -apple-system, sans-serif;
+      font-size: clamp(38px, 10.5vw, 44px);
+      font-weight: 700;
+      line-height: 1;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .bank-goal {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-3);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: var(--card-muted);
+      color: var(--text-2);
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .status-pill.pos {
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .status-pill.neg {
+      background: var(--red-bg);
+      color: var(--red);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--border);
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--navy-mid) 0%, var(--navy-accent) 100%);
+      transition: width 0.5s ease;
+      min-width: 10px;
+    }
+
+    .progress-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+      margin-bottom: 18px;
+    }
+
+    .progress-pct {
+      font-weight: 700;
+      color: var(--navy-accent);
+    }
+
+    .progress-next {
+      color: var(--text-3);
+      font-weight: 500;
+    }
+
+    /* ==================== POLL ==================== */
+    .poll-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .poll-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .poll-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .poll-btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 11px 10px;
+      min-height: 44px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.12s ease, border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+    }
+
+    .poll-btn:active {
+      transform: scale(0.98);
+    }
+
+    .poll-btn.selected {
+      background: var(--navy-soft);
+      border-color: var(--navy-accent);
+      color: var(--navy-mid);
+      box-shadow: 0 0 0 2px rgba(35, 66, 154, 0.12);
+    }
+
+    .poll-note {
+      margin-top: 8px;
+      font-size: 11.5px;
+      color: var(--text-3);
+      min-height: 15px;
+    }
+
+    /* ==================== CTA ==================== */
+    .cta-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 999px;
+      background: var(--navy-mid);
+      color: #FFFFFF;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+      transition: background 0.15s ease, transform 0.12s ease;
+    }
+
+    .cta-btn:active {
+      transform: scale(0.99);
+      background: var(--navy-deep);
+    }
+
+    .scroll-hint {
+      display: block;
+      text-align: center;
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text-3);
+      text-decoration: none;
+    }
+
+    /* ==================== SECTIONS ==================== */
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 16px;
+      margin-bottom: 14px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .section-sub {
+      font-size: 12px;
+      color: var(--text-3);
+      font-weight: 500;
+    }
+
+    /* ==================== MILESTONES ==================== */
+    .milestones-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .ms-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 10px 10px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ms-card.done {
+      background: #F0FDF4;
+      border-color: #BBF7D0;
+    }
+
+    .ms-icon {
+      font-size: 18px;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .ms-name {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .ms-amount {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-2);
+      margin-bottom: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ms-bar {
+      width: 100%;
+      height: 5px;
+      border-radius: 999px;
+      background: var(--border);
+      overflow: hidden;
+    }
+
+    .ms-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: var(--navy-accent);
+      transition: width 0.4s ease;
+    }
+
+    .ms-card.done .ms-bar-fill {
+      background: var(--green);
+    }
+
+    .ms-pct {
+      margin-top: 5px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-3);
+    }
+
+    .ms-card.done .ms-pct {
+      color: var(--green);
+    }
+
+    /* ==================== CHART & KPIs ==================== */
+    .seg-toggle {
+      display: inline-flex;
+      background: var(--card-muted);
+      border-radius: 999px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .seg-btn {
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--text-3);
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .seg-btn.active {
+      background: var(--card);
+      color: var(--text);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .chart-wrap {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 10px 8px;
+      margin-bottom: 12px;
+    }
+
+    .chart-legend {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 11.5px;
+      color: var(--text-3);
+      margin-bottom: 6px;
+      padding: 0 4px;
+    }
+
+    .legend-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .kpi-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 9px 6px;
+      text-align: center;
+    }
+
+    .kpi-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kpi-val.pos { color: var(--green); }
+    .kpi-val.neg { color: var(--red); }
+
+    .kpi-lbl {
+      font-size: 10.5px;
+      color: var(--text-3);
+      margin-top: 2px;
+    }
+
+    /* ==================== MATCHES ==================== */
+    .filter-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .filter-pill {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-2);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .filter-pill.active {
+      background: var(--navy-mid);
+      border-color: var(--navy-mid);
+      color: #FFFFFF;
+    }
+
+    .match-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .match-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .match-meta {
+      font-size: 11px;
+      color: var(--text-3);
+      margin-bottom: 3px;
+    }
+
+    .match-teams {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .match-pick {
+      font-size: 12px;
+      color: var(--text-2);
+    }
+
+    .match-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .match-delta {
+      font-size: 14px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .match-delta.win { color: var(--green); }
+    .match-delta.loss { color: var(--red); }
+    .match-delta.push { color: var(--text-3); }
+
+    .match-bank {
+      font-size: 11px;
+      color: var(--text-3);
+      margin-top: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .empty-state {
+      background: var(--surface);
+      border: 1px dashed #CBD5E1;
+      border-radius: var(--radius-md);
+      padding: 18px 14px;
+      text-align: center;
+    }
+
+    .empty-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .empty-text {
+      font-size: 12.5px;
+      color: var(--text-3);
+      line-height: 1.5;
+    }
+
+    /* ==================== RULES ==================== */
+    .rules-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rules-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.45;
+    }
+
+    .rule-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--navy-soft);
+      color: var(--navy-mid);
+      font-size: 11.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ==================== FOOTER ==================== */
+    .footer {
+      text-align: center;
+      padding: 10px 8px 6px;
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    .footer a {
+      color: var(--navy-accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <!-- HERO -->
+    <header class="hero">
+      <div class="hero-eyebrow">ORIGINATOR LAB · 5 ИЮНЯ 2027</div>
+      <h1 class="hero-title">ДОРОГА В МАДРИД</h1>
+      <p class="hero-sub">С 20 000 ₽ до 500 000 ₽ · футбольная математика</p>
+      <div class="countdown-bar" aria-live="polite">
+        <span><span class="cd-num" id="cdDays">197</span><span class="cd-unit"> дн</span></span>
+        <span class="cd-sep">:</span>
+        <span><span class="cd-num" id="cdHours">08</span><span class="cd-unit"> ч</span></span>
+        <span class="cd-sep">:</span>
+        <span><span class="cd-num" id="cdMins">14</span><span class="cd-unit"> м</span></span>
+        <span class="cd-label">до финала ЛЧ</span>
+      </div>
+    </header>
+
+    <!-- FLOATING MAIN SHEET -->
+    <main class="main-sheet">
+      <section class="hero-card">
+        <div class="bank-top">
+          <div class="bank-figures">
+            <span class="bank-value" id="bankValue">20 000 ₽</span>
+            <span class="bank-goal" id="bankGoal">из 500 000 ₽</span>
+          </div>
+          <span class="status-pill" id="statusPill">Старт · 21 ноя</span>
+        </div>
+
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill" style="width: 4%;"></div>
+        </div>
+        <div class="progress-meta">
+          <span class="progress-pct" id="progressPct">4% пути</span>
+          <span class="progress-next" id="progressNext">до перелёта: 60 000 ₽</span>
+        </div>
+
+        <!-- VIEWER POLL -->
+        <div class="poll-box">
+          <div class="poll-title">Доедет до Мадрида?</div>
+          <div class="poll-actions">
+            <button type="button" class="poll-btn" id="voteYesBtn">🔥 Доедет</button>
+            <button type="button" class="poll-btn" id="voteNoBtn">💀 Сольётся</button>
+          </div>
+          <div class="poll-note" id="pollNote">Выбери свой прогноз</div>
+        </div>
+
+        <a class="cta-btn" id="tgLink" href="https://t.me/Originator_lab" target="_blank" rel="noopener noreferrer">
+          <span>Следить в Telegram</span>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M21.9 4.2c.2-.9-.6-1.6-1.4-1.3L2.6 9.8c-.9.3-.9 1.6 0 1.9l4.5 1.5 1.7 5.4c.2.7 1.1.9 1.6.4l2.5-2.4 4.7 3.5c.7.5 1.7.1 1.9-.7l2.4-15.2zM8.9 12.7l9.2-5.8-7.4 7.1-.3 3.1-1.5-4.4z"/>
+          </svg>
+        </a>
+
+        <a class="scroll-hint" href="#details">↓ График, этапы и все матчи</a>
+      </section>
+
+      <!-- MILESTONES -->
+      <section class="section" id="details">
+        <div class="section-head">
+          <h2 class="section-title">Этапы поездки</h2>
+          <span class="section-sub">Цель: 500 000 ₽</span>
+        </div>
+        <div class="milestones-grid" id="milestonesGrid"></div>
+      </section>
+
+      <!-- CHART & KPIS -->
+      <section class="section">
+        <div class="section-head">
+          <h2 class="section-title">Динамика банка</h2>
+          <div class="seg-toggle" role="tablist">
+            <button type="button" class="seg-btn active" id="modeModelBtn">Модель</button>
+            <button type="button" class="seg-btn" id="modeDuelBtn">vs ChatGPT</button>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-legend" id="chartLegend">
+            <span><span class="legend-dot" style="background:#23429A;"></span>Originator v13.3</span>
+          </div>
+          <div id="chartContainer"></div>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-item">
+            <div class="kpi-val" id="kpiMatches">0</div>
+            <div class="kpi-lbl">Матчей</div>
+          </div>
+          <div class="kpi-item">
+            <div class="kpi-val" id="kpiWinrate">—</div>
+            <div class="kpi-lbl">Винрейт</div>
+          </div>
+          <div class="kpi-item">
+            <div class="kpi-val" id="kpiRoi">—</div>
+            <div class="kpi-lbl">ROI</div>
+          </div>
+          <div class="kpi-item">
+            <div class="kpi-val" id="kpiProfit">0 ₽</div>
+            <div class="kpi-lbl">Прибыль</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MATCH HISTORY -->
+      <section class="section">
+        <div class="section-head">
+          <h2 class="section-title">История матчей</h2>
+          <span class="section-sub" id="matchCountLabel">0 записей</span>
+        </div>
+        <div class="filter-row">
+          <button type="button" class="filter-pill active" data-filter="all">Все</button>
+          <button type="button" class="filter-pill" data-filter="win">Плюс</button>
+          <button type="button" class="filter-pill" data-filter="loss">Минус</button>
+        </div>
+        <div class="match-list" id="matchList"></div>
+      </section>
+
+      <!-- RULES -->
+      <section class="section">
+        <div class="section-head">
+          <h2 class="section-title">Правила эксперимента</h2>
+        </div>
+        <ul class="rules-list">
+          <li>
+            <span class="rule-num">1</span>
+            <span>Старт с <strong>20 000 ₽</strong>, цель — <strong>500 000 ₽</strong> до 5 июня 2027 (финал ЛЧ на «Эстадио Метрополитано»).</span>
+          </li>
+          <li>
+            <span class="rule-num">2</span>
+            <span>Только клубные бигмаркеты топ-5 европейских лиг и еврокубков. Расчёт через Python-модель (Монте-Карло, 100 000 симуляций).</span>
+          </li>
+          <li>
+            <span class="rule-num">3</span>
+            <span>Все входы фиксируются заранее до стартового свистка. В трекер попадает каждый матч — и плюсовые, и минусовые.</span>
+          </li>
+        </ul>
+      </section>
+
+      <footer class="footer">
+        Originator Lab · Дорога в Мадрид · <a href="https://t.me/Originator_lab" target="_blank" rel="noopener noreferrer">@Originator_lab</a>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // ============================================================
+    // НАСТРОЙКИ ТРЕКЕРА (редактируй прямо здесь после матчей)
+    // ============================================================
+    const CONFIG = {
+      startBank: 20000,
+      targetBank: 500000,
+      finalDateIso: "2027-06-05T19:00:00Z", // 5 июня 2027, 21:00 CEST (Мадрид)
+      startDateLabel: "Старт · 21 ноя",
+      telegramUrl: "https://t.me/Originator_lab",
+      // Опционально: ссылка на опубликованный CSV из Google Таблиц для автообновления
+      sheetCsvUrl: "",
+      // Стартовые голоса опроса (пользователь может нажать 1 раз, сохраняется в браузере)
+      pollBaseYes: 68,
+      pollBaseNo: 32,
+      milestones: [
+        { key: "flight", icon: "✈️", name: "Перелёт", cost: 80000, cumulative: 80000, genitive: "перелёта" },
+        { key: "hotel", icon: "🏨", name: "Отель", cost: 120000, cumulative: 200000, genitive: "отеля" },
+        { key: "ticket", icon: "🎟️", name: "Билет ЛЧ", cost: 300000, cumulative: 500000, genitive: "билета ЛЧ" }
+      ]
+    };
+
+    // Добавляй сюда завершённые матчи (новые можно в конец списка):
+    // Пример:
+    // {
+    //   day: 1,
+    //   date: "21.11",
+    //   league: "АПЛ",
+    //   match: "Ньюкасл — Арсенал",
+    //   pick: "Ф2 (0) · 1.92",
+    //   stakePct: 3,
+    //   result: "win",      // "win" | "loss" | "push"
+    //   delta: 552,         // изменение банка модели в ₽
+    //   gptDelta: -600      // изменение банка ChatGPT в ₽ (опционально)
+    // }
+    let MATCHES = [];
+
+    // ============================================================
+    // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+    // ============================================================
+    const fmtRub = (n) => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " ₽";
+    const fmtSignedRub = (n) => (n > 0 ? "+" : n < 0 ? "−" : "") + fmtRub(Math.abs(n));
+    const fmtK = (n) => Math.round(n / 1000) + "К ₽";
+
+    let chartMode = "model"; // "model" | "duel"
+    let matchFilter = "all"; // "all" | "win" | "loss"
+
+    function updateCountdown() {
+      const target = new Date(CONFIG.finalDateIso).getTime();
+      const now = Date.now();
+      const diff = Math.max(0, target - now);
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const mins = Math.floor((diff / (1000 * 60)) % 60);
+      document.getElementById("cdDays").textContent = String(days);
+      document.getElementById("cdHours").textContent = String(hours).padStart(2, "0");
+      document.getElementById("cdMins").textContent = String(mins).padStart(2, "0");
+    }
+
+    function computeState() {
+      let bank = CONFIG.startBank;
+      let gptBank = CONFIG.startBank;
+      let wins = 0, losses = 0, pushes = 0;
+      let totalStaked = 0;
+      const modelSeries = [CONFIG.startBank];
+      const gptSeries = [CONFIG.startBank];
+      const enriched = [];
+
+      for (const m of MATCHES) {
+        const stakeRub = (bank * (Number(m.stakePct) || 3)) / 100;
+        totalStaked += stakeRub;
+        bank += Number(m.delta) || 0;
+        gptBank += Number(m.gptDelta) || 0;
+        if (m.result === "win") wins++;
+        else if (m.result === "loss") losses++;
+        else pushes++;
+        modelSeries.push(bank);
+        gptSeries.push(gptBank);
+        enriched.push({ ...m, bankAfter: bank });
+      }
+
+      const profit = bank - CONFIG.startBank;
+      const decided = wins + losses;
+      const winrate = decided > 0 ? (wins / decided) * 100 : null;
+      const roi = totalStaked > 0 ? (profit / totalStaked) * 100 : null;
+      const lastDay = MATCHES.length > 0 ? (MATCHES[MATCHES.length - 1].day || MATCHES.length) : 0;
+
+      return { bank, gptBank, profit, wins, losses, pushes, winrate, roi, lastDay, modelSeries, gptSeries, enriched };
+    }
+
+    function renderHero(state) {
+      document.getElementById("bankValue").textContent = fmtRub(state.bank);
+      document.getElementById("bankGoal").textContent = "из " + fmtRub(CONFIG.targetBank);
+
+      const pill = document.getElementById("statusPill");
+      pill.className = "status-pill";
+      if (MATCHES.length === 0) {
+        pill.textContent = CONFIG.startDateLabel;
+      } else {
+        pill.textContent = `День ${state.lastDay} · ${fmtSignedRub(state.profit)}`;
+        if (state.profit > 0) pill.classList.add("pos");
+        else if (state.profit < 0) pill.classList.add("neg");
+      }
+
+      const pct = Math.max(0, Math.min(100, (state.bank / CONFIG.targetBank) * 100));
+      document.getElementById("progressFill").style.width = Math.max(pct, 3.5) + "%";
+      document.getElementById("progressPct").textContent = (pct < 10 ? pct.toFixed(1).replace(/\.0$/, "") : Math.round(pct)) + "% пути";
+
+      const nextMs = CONFIG.milestones.find((ms) => state.bank < ms.cumulative);
+      const nextEl = document.getElementById("progressNext");
+      if (nextMs) {
+        nextEl.textContent = `до ${nextMs.genitive}: ${fmtRub(nextMs.cumulative - state.bank)}`;
+      } else {
+        nextEl.textContent = "Цель достигнута — летим в Мадрид!";
+      }
+    }
+
+    function renderMilestones(state) {
+      const grid = document.getElementById("milestonesGrid");
+      let prevCum = 0;
+      grid.innerHTML = CONFIG.milestones.map((ms) => {
+        const span = ms.cumulative - prevCum;
+        const progressInStage = Math.max(0, Math.min(span, state.bank - prevCum));
+        const pct = Math.round((progressInStage / span) * 100);
+        const done = state.bank >= ms.cumulative;
+        prevCum = ms.cumulative;
+        return `
+          <div class="ms-card ${done ? "done" : ""}">
+            <div class="ms-icon">${ms.icon}</div>
+            <div class="ms-name">${ms.name}</div>
+            <div class="ms-amount">${fmtK(ms.cost)}</div>
+            <div class="ms-bar"><div class="ms-bar-fill" style="width:${pct}%"></div></div>
+            <div class="ms-pct">${done ? "Готово ✓" : pct + "%"}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderChart(state) {
+      const container = document.getElementById("chartContainer");
+      const legend = document.getElementById("chartLegend");
+      legend.innerHTML = chartMode === "duel"
+        ? `<span><span class="legend-dot" style="background:#23429A;"></span>Originator v13.3 (${fmtRub(state.bank)})</span>
+           <span><span class="legend-dot" style="background:#9CA3AF;"></span>ChatGPT (${fmtRub(state.gptBank)})</span>`
+        : `<span><span class="legend-dot" style="background:#23429A;"></span>Originator v13.3 (${fmtRub(state.bank)})</span>`;
+
+      const w = 360, h = 136, padL = 8, padR = 8, padT = 14, padB = 22;
+      const seriesA = state.modelSeries.length === 1 ? [state.modelSeries[0], state.modelSeries[0]] : state.modelSeries;
+      const seriesB = state.gptSeries.length === 1 ? [state.gptSeries[0], state.gptSeries[0]] : state.gptSeries;
+      const allVals = chartMode === "duel" ? seriesA.concat(seriesB) : seriesA;
+      let minV = Math.min(...allVals, CONFIG.startBank * 0.85);
+      let maxV = Math.max(...allVals, CONFIG.startBank * 1.25);
+      if (maxV - minV < 1000) { minV -= 2000; maxV += 2000; }
+
+      const toX = (i, len) => padL + (i / Math.max(1, len - 1)) * (w - padL - padR);
+      const toY = (v) => padT + (1 - (v - minV) / (maxV - minV)) * (h - padT - padB);
+
+      const ptsA = seriesA.map((v, i) => `${toX(i, seriesA.length).toFixed(1)},${toY(v).toFixed(1)}`).join(" ");
+      const areaA = `${toX(0, seriesA.length).toFixed(1)},${(h - padB).toFixed(1)} ${ptsA} ${toX(seriesA.length - 1, seriesA.length).toFixed(1)},${(h - padB).toFixed(1)}`;
+      const ptsB = seriesB.map((v, i) => `${toX(i, seriesB.length).toFixed(1)},${toY(v).toFixed(1)}`).join(" ");
+      const baseY = toY(CONFIG.startBank).toFixed(1);
+      const lastX = toX(seriesA.length - 1, seriesA.length).toFixed(1);
+      const lastY = toY(seriesA[seriesA.length - 1]).toFixed(1);
+
+      container.innerHTML = `
+        <svg viewBox="0 0 ${w} ${h}" width="100%" height="136" role="img" aria-label="График банка">
+          <defs>
+            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#23429A" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="#23429A" stop-opacity="0.0"/>
+            </linearGradient>
+          </defs>
+          <line x1="${padL}" y1="${baseY}" x2="${w - padR}" y2="${baseY}" stroke="#CBD5E1" stroke-dasharray="4 4" stroke-width="1"/>
+          <polygon points="${areaA}" fill="url(#areaGrad)"/>
+          ${chartMode === "duel" ? `<polyline points="${ptsB}" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round" stroke-linejoin="round"/>` : ""}
+          <polyline points="${ptsA}" fill="none" stroke="#23429A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="${lastX}" cy="${lastY}" r="4.2" fill="#23429A" stroke="#FFFFFF" stroke-width="2"/>
+          <text x="${padL}" y="${h - 5}" fill="#6B7280" font-size="10.5" font-family="Inter, sans-serif">Старт: 20 000 ₽</text>
+          <text x="${w - padR}" y="${h - 5}" text-anchor="end" fill="#6B7280" font-size="10.5" font-family="Inter, sans-serif">Цель: 500 000 ₽</text>
+        </svg>
+      `;
+
+      document.getElementById("kpiMatches").textContent = String(MATCHES.length);
+      document.getElementById("kpiWinrate").textContent = state.winrate === null ? "—" : state.winrate.toFixed(1) + "%";
+
+      const roiEl = document.getElementById("kpiRoi");
+      roiEl.className = "kpi-val";
+      if (state.roi === null) {
+        roiEl.textContent = "—";
+      } else {
+        roiEl.textContent = (state.roi > 0 ? "+" : "") + state.roi.toFixed(1) + "%";
+        if (state.roi > 0) roiEl.classList.add("pos");
+        else if (state.roi < 0) roiEl.classList.add("neg");
+      }
+
+      const profEl = document.getElementById("kpiProfit");
+      profEl.className = "kpi-val";
+      profEl.textContent = fmtSignedRub(state.profit);
+      if (state.profit > 0) profEl.classList.add("pos");
+      else if (state.profit < 0) profEl.classList.add("neg");
+    }
+
+    function renderMatches(state) {
+      const list = document.getElementById("matchList");
+      const filtered = state.enriched
+        .slice()
+        .reverse()
+        .filter((m) => matchFilter === "all" || m.result === matchFilter);
+
+      document.getElementById("matchCountLabel").textContent =
+        MATCHES.length === 0 ? "Старт 21 ноября" : `${filtered.length} из ${MATCHES.length}`;
+
+      if (filtered.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-title">${MATCHES.length === 0 ? "Первый тур — суббота, 21 ноября" : "По этому фильтру пока пусто"}</div>
+            <div class="empty-text">${MATCHES.length === 0
+              ? "После первых матчей здесь появятся все входы модели, расчёт банка и живой график пути до Мадрида."
+              : "Попробуй переключить фильтр на «Все»."}</div>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = filtered.map((m) => {
+        const cls = m.result === "win" ? "win" : m.result === "loss" ? "loss" : "push";
+        const icon = m.result === "win" ? "✅" : m.result === "loss" ? "❌" : "↩️";
+        return `
+          <div class="match-row">
+            <div>
+              <div class="match-meta">День ${m.day || 1} · ${m.date} · ${m.league}</div>
+              <div class="match-teams">${icon} ${m.match}</div>
+              <div class="match-pick">${m.pick} (${m.stakePct || 3}%)</div>
+            </div>
+            <div class="match-right">
+              <div class="match-delta ${cls}">${fmtSignedRub(m.delta)}</div>
+              <div class="match-bank">Банк: ${fmtRub(m.bankAfter)}</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function initPoll() {
+      const key = "originator_madrid_vote_v1";
+      const saved = localStorage.getItem(key);
+      const yesBtn = document.getElementById("voteYesBtn");
+      const noBtn = document.getElementById("voteNoBtn");
+      const note = document.getElementById("pollNote");
+
+      function renderPoll(choice) {
+        yesBtn.classList.toggle("selected", choice === "yes");
+        noBtn.classList.toggle("selected", choice === "no");
+        yesBtn.textContent = choice === "yes" ? "🔥 Доедет ✓" : "🔥 Доедет";
+        noBtn.textContent = choice === "no" ? "💀 Сольётся ✓" : "💀 Сольётся";
+        if (choice === "yes") note.textContent = "Твой прогноз сохранён — проверим 5 июня 2027";
+        else if (choice === "no") note.textContent = "Твой прогноз сохранён — посмотрим на дистанции";
+        else note.textContent = "Выбери свой прогноз";
+      }
+
+      renderPoll(saved);
+
+      yesBtn.addEventListener("click", () => {
+        localStorage.setItem(key, "yes");
+        renderPoll("yes");
+      });
+      noBtn.addEventListener("click", () => {
+        localStorage.setItem(key, "no");
+        renderPoll("no");
+      });
+    }
+
+    function renderAll() {
+      const state = computeState();
+      renderHero(state);
+      renderMilestones(state);
+      renderChart(state);
+      renderMatches(state);
+    }
+
+    document.getElementById("modeModelBtn").addEventListener("click", () => {
+      chartMode = "model";
+      document.getElementById("modeModelBtn").classList.add("active");
+      document.getElementById("modeDuelBtn").classList.remove("active");
+      renderAll();
+    });
+
+    document.getElementById("modeDuelBtn").addEventListener("click", () => {
+      chartMode = "duel";
+      document.getElementById("modeDuelBtn").classList.add("active");
+      document.getElementById("modeModelBtn").classList.remove("active");
+      renderAll();
+    });
+
+    document.querySelectorAll(".filter-pill").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        matchFilter = btn.dataset.filter;
+        document.querySelectorAll(".filter-pill").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderAll();
+      });
+    });
+
+    updateCountdown();
+    setInterval(updateCountdown, 30000);
+    initPoll();
+    renderAll();
+  </script>
+</body>
+</html>
