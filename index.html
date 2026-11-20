@@ -70,16 +70,35 @@
     /* ==================== HERO ==================== */
     .hero {
       position: relative;
-      background-color: var(--navy-deep);
-      background-image:
-        linear-gradient(180deg, rgba(13, 27, 53, 0.72) 0%, rgba(13, 27, 53, 0.25) 38%, rgba(13, 27, 53, 0.12) 68%, rgba(13, 27, 53, 0.85) 100%),
-        url("hero.jpg");
-      background-position: center 72%;
-      background-size: cover;
-      background-repeat: no-repeat;
+      overflow: hidden;
+      background: linear-gradient(180deg, #0D1B35 0%, #162B54 60%, #0D1B35 100%);
       color: #FFFFFF;
-      padding: calc(env(safe-area-inset-top, 0px) + 22px) 20px 218px;
+      padding: calc(env(safe-area-inset-top, 0px) + 22px) 16px 210px;
       text-align: center;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 75%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .hero-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(13, 27, 53, 0.68) 0%, rgba(13, 27, 53, 0.22) 38%, rgba(13, 27, 53, 0.08) 68%, rgba(13, 27, 53, 0.84) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
     }
 
     .hero-eyebrow {
@@ -87,17 +106,18 @@
       font-weight: 600;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.68);
-      margin-bottom: 10px;
+      color: rgba(255, 255, 255, 0.72);
+      margin-bottom: 8px;
     }
 
     .hero-title {
       font-family: "Oswald", "Arial Narrow", -apple-system, sans-serif;
-      font-size: clamp(42px, 12.2vw, 54px);
+      font-size: clamp(32px, 9.6vw, 48px);
       font-weight: 700;
-      line-height: 0.98;
+      line-height: 1.02;
       letter-spacing: 0.015em;
       text-transform: uppercase;
+      white-space: nowrap;
       color: #FFFFFF;
       text-shadow: 0 4px 24px rgba(8, 17, 36, 0.45);
       margin-bottom: 10px;
@@ -289,39 +309,30 @@
       border: 1px solid var(--border);
       background: var(--card);
       color: var(--text);
-      border-radius: 999px;
-      padding: 10px 10px;
+      border-radius: 14px;
+      padding: 11px 10px;
+      min-height: 44px;
       font-family: inherit;
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 600;
+      white-space: nowrap;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
-      transition: transform 0.12s ease, border-color 0.15s ease, background 0.15s ease;
-      font-variant-numeric: tabular-nums;
+      gap: 6px;
+      transition: transform 0.12s ease, border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
     }
 
     .poll-btn:active {
       transform: scale(0.98);
     }
 
-    .poll-btn.yes {
-      background: var(--navy-soft);
-      border-color: rgba(35, 66, 154, 0.22);
-      color: var(--navy-mid);
-    }
-
     .poll-btn.selected {
+      background: var(--navy-soft);
       border-color: var(--navy-accent);
-      box-shadow: 0 0 0 2px rgba(35, 66, 154, 0.15);
-    }
-
-    .poll-btn.no.selected {
-      background: #F3F4F6;
-      border-color: #6B7280;
-      box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.15);
+      color: var(--navy-mid);
+      box-shadow: 0 0 0 2px rgba(35, 66, 154, 0.12);
     }
 
     .poll-note {
@@ -706,16 +717,20 @@
   <div class="page-shell">
     <!-- HERO -->
     <header class="hero">
-      <div class="hero-eyebrow">ORIGINATOR LAB · 5 ИЮНЯ 2027</div>
-      <h1 class="hero-title">ДОРОГА В МАДРИД</h1>
-      <p class="hero-sub">С 20 000 ₽ до 500 000 ₽ · футбольная математика</p>
-      <div class="countdown-bar" aria-live="polite">
-        <span><span class="cd-num" id="cdDays">197</span><span class="cd-unit"> дн</span></span>
-        <span class="cd-sep">:</span>
-        <span><span class="cd-num" id="cdHours">08</span><span class="cd-unit"> ч</span></span>
-        <span class="cd-sep">:</span>
-        <span><span class="cd-num" id="cdMins">14</span><span class="cd-unit"> м</span></span>
-        <span class="cd-label">до финала ЛЧ</span>
+      <img class="hero-bg" src="https://originator-lab.github.io/madrid/hero.jpg?v=2" alt="Estadio Metropolitano" loading="eager" />
+      <div class="hero-scrim" aria-hidden="true"></div>
+      <div class="hero-content">
+        <div class="hero-eyebrow">ORIGINATOR LAB · 5 ИЮНЯ 2027</div>
+        <h1 class="hero-title">ДОРОГА В МАДРИД</h1>
+        <p class="hero-sub">С 20 000 ₽ до 500 000 ₽ · футбольная математика</p>
+        <div class="countdown-bar" aria-live="polite">
+          <span><span class="cd-num" id="cdDays">197</span><span class="cd-unit"> дн</span></span>
+          <span class="cd-sep">:</span>
+          <span><span class="cd-num" id="cdHours">08</span><span class="cd-unit"> ч</span></span>
+          <span class="cd-sep">:</span>
+          <span><span class="cd-num" id="cdMins">14</span><span class="cd-unit"> м</span></span>
+          <span class="cd-label">до финала ЛЧ</span>
+        </div>
       </div>
     </header>
 
@@ -742,14 +757,10 @@
         <div class="poll-box">
           <div class="poll-title">Доедет до Мадрида?</div>
           <div class="poll-actions">
-            <button type="button" class="poll-btn yes" id="voteYesBtn">
-              <span>🔥 Доедет ·</span> <strong id="voteYesPct">68%</strong>
-            </button>
-            <button type="button" class="poll-btn no" id="voteNoBtn">
-              <span>💀 Сольётся ·</span> <strong id="voteNoPct">32%</strong>
-            </button>
+            <button type="button" class="poll-btn" id="voteYesBtn">🔥 Доедет</button>
+            <button type="button" class="poll-btn" id="voteNoBtn">💀 Сольётся</button>
           </div>
-          <div class="poll-note" id="pollNote">Нажми, чтобы проголосовать</div>
+          <div class="poll-note" id="pollNote">Выбери свой прогноз</div>
         </div>
 
         <a class="cta-btn" id="tgLink" href="https://t.me/Originator_lab" target="_blank" rel="noopener noreferrer">
@@ -1098,17 +1109,13 @@
       const note = document.getElementById("pollNote");
 
       function renderPoll(choice) {
-        const yes = CONFIG.pollBaseYes + (choice === "yes" ? 1 : 0);
-        const no = CONFIG.pollBaseNo + (choice === "no" ? 1 : 0);
-        const total = yes + no;
-        const yesPct = Math.round((yes / total) * 100);
-        const noPct = 100 - yesPct;
-        document.getElementById("voteYesPct").textContent = yesPct + "%";
-        document.getElementById("voteNoPct").textContent = noPct + "%";
         yesBtn.classList.toggle("selected", choice === "yes");
         noBtn.classList.toggle("selected", choice === "no");
-        if (choice === "yes") note.textContent = "Твой голос за «Доедет» учтён 🔥";
-        else if (choice === "no") note.textContent = "Твой голос за «Сольётся» учтён — проверим на дистанции";
+        yesBtn.textContent = choice === "yes" ? "🔥 Доедет ✓" : "🔥 Доедет";
+        noBtn.textContent = choice === "no" ? "💀 Сольётся ✓" : "💀 Сольётся";
+        if (choice === "yes") note.textContent = "Твой прогноз сохранён — проверим 5 июня 2027";
+        else if (choice === "no") note.textContent = "Твой прогноз сохранён — посмотрим на дистанции";
+        else note.textContent = "Выбери свой прогноз";
       }
 
       renderPoll(saved);
