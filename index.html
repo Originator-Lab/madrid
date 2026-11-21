@@ -555,6 +555,7 @@
 
     .kpi-val.pos { color: var(--green); }
     .kpi-val.neg { color: var(--red); }
+    .kpi-val.muted { font-size: 12px; font-weight: 600; color: var(--text-3); }
 
     .kpi-lbl {
       font-size: 10.5px;
@@ -803,11 +804,11 @@
             <div class="kpi-lbl">Матчей</div>
           </div>
           <div class="kpi-item">
-            <div class="kpi-val" id="kpiWinrate">—</div>
-            <div class="kpi-lbl">Винрейт</div>
+            <div class="kpi-val" id="kpiBankPct">0%</div>
+            <div class="kpi-lbl">К банку</div>
           </div>
           <div class="kpi-item">
-            <div class="kpi-val" id="kpiRoi">—</div>
+            <div class="kpi-val muted" id="kpiRoi">с 10 игр</div>
             <div class="kpi-lbl">ROI</div>
           </div>
           <div class="kpi-item">
@@ -949,8 +950,16 @@
       const gptSeries = [CONFIG.startBank];
       const enriched = [];
 
+      let currentDay = null;
+      let dayStartBank = bank;
+
       for (const m of MATCHES) {
-        const stakeRub = (bank * (Number(m.stakePct) || 3)) / 100;
+        const mDay = m.day || null;
+        if (mDay !== currentDay) {
+          currentDay = mDay;
+          dayStartBank = bank;
+        }
+        const stakeRub = (dayStartBank * (Number(m.stakePct) || 6)) / 100;
         totalStaked += stakeRub;
         bank += Number(m.delta) || 0;
         gptBank += Number(m.gptDelta) || 0;
@@ -963,12 +972,13 @@
       }
 
       const profit = bank - CONFIG.startBank;
+      const bankPct = (profit / CONFIG.startBank) * 100;
       const decided = wins + losses;
       const winrate = decided > 0 ? (wins / decided) * 100 : null;
-      const roi = totalStaked > 0 ? (profit / totalStaked) * 100 : null;
+      const roi = (MATCHES.length >= 10 && totalStaked > 0) ? (profit / totalStaked) * 100 : null;
       const lastDay = MATCHES.length > 0 ? (MATCHES[MATCHES.length - 1].day || MATCHES.length) : 0;
 
-      return { bank, gptBank, profit, wins, losses, pushes, winrate, roi, lastDay, modelSeries, gptSeries, enriched };
+      return { bank, gptBank, profit, bankPct, totalStaked, wins, losses, pushes, winrate, roi, lastDay, modelSeries, gptSeries, enriched };
     }
 
     function renderHero(state) {
@@ -1064,14 +1074,26 @@
       `;
 
       document.getElementById("kpiMatches").textContent = String(MATCHES.length);
-      document.getElementById("kpiWinrate").textContent = state.winrate === null ? "—" : state.winrate.toFixed(1) + "%";
+
+      const bankPctEl = document.getElementById("kpiBankPct");
+      bankPctEl.className = "kpi-val";
+      if (MATCHES.length === 0) {
+        bankPctEl.textContent = "0%";
+      } else {
+        const sign = state.bankPct > 0 ? "+" : state.bankPct < 0 ? "−" : "";
+        bankPctEl.textContent = sign + Math.abs(state.bankPct).toFixed(1) + "%";
+        if (state.bankPct > 0) bankPctEl.classList.add("pos");
+        else if (state.bankPct < 0) bankPctEl.classList.add("neg");
+      }
 
       const roiEl = document.getElementById("kpiRoi");
       roiEl.className = "kpi-val";
       if (state.roi === null) {
-        roiEl.textContent = "—";
+        roiEl.textContent = "с 10 игр";
+        roiEl.classList.add("muted");
       } else {
-        roiEl.textContent = (state.roi > 0 ? "+" : "") + state.roi.toFixed(1) + "%";
+        const sign = state.roi > 0 ? "+" : state.roi < 0 ? "−" : "";
+        roiEl.textContent = sign + Math.abs(state.roi).toFixed(1) + "%";
         if (state.roi > 0) roiEl.classList.add("pos");
         else if (state.roi < 0) roiEl.classList.add("neg");
       }
