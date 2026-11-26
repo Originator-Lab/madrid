@@ -646,6 +646,26 @@
       font-variant-numeric: tabular-nums;
     }
 
+    .show-more-btn {
+      appearance: none;
+      width: 100%;
+      margin-top: 10px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--navy-accent);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .show-more-btn:active {
+      background: var(--navy-soft);
+    }
+
     .empty-state {
       background: var(--surface);
       border: 1px dashed #CBD5E1;
@@ -787,10 +807,7 @@
       <section class="section">
         <div class="section-head">
           <h2 class="section-title">Динамика банка</h2>
-          <div class="seg-toggle" role="tablist">
-            <button type="button" class="seg-btn active" id="modeModelBtn">Модель</button>
-            <button type="button" class="seg-btn" id="modeDuelBtn">vs ChatGPT</button>
-          </div>
+          <span class="section-sub">Python · 100 000 симуляций</span>
         </div>
         <div class="chart-wrap">
           <div class="chart-legend" id="chartLegend">
@@ -902,9 +919,9 @@
         match: "Айнтрахт — Хоффенхайм (1:0)",
         pick: "Ф2 (0) · 1.98",
         stakePct: 6,
+        stakeRub: 1200,
         result: "loss",
-        delta: -1200,
-        gptDelta: 0
+        delta: -1200
       },
       {
         day: 1,
@@ -913,9 +930,9 @@
         match: "Боруссия М — Боруссия Д (0:1)",
         pick: "Ф2 (-1.0) · 1.96",
         stakePct: 6,
+        stakeRub: 1200,
         result: "push",
-        delta: 0,
-        gptDelta: 0
+        delta: 0
       },
       {
         day: 2,
@@ -924,9 +941,9 @@
         match: "Барселона — Вильярреал (3:2)",
         pick: "ТМ (3.5) · 2.71",
         stakePct: 3,
+        stakeRub: 564,
         result: "loss",
-        delta: -564,
-        gptDelta: 0
+        delta: -564
       },
       {
         day: 2,
@@ -935,9 +952,9 @@
         match: "Болонья — Удинезе (1:1)",
         pick: "ТБ (2.5) · 1.89",
         stakePct: 3,
+        stakeRub: 564,
         result: "loss",
-        delta: -564,
-        gptDelta: 0
+        delta: -564
       },
       {
         day: 2,
@@ -946,9 +963,9 @@
         match: "Халл Сити — Брайтон (2:0)",
         pick: "ИТМ 1 (0.5) · 2.26",
         stakePct: 3,
+        stakeRub: 564,
         result: "loss",
-        delta: -564,
-        gptDelta: 0
+        delta: -564
       },
       {
         day: 3,
@@ -957,9 +974,9 @@
         match: "Будё/Глимт — ЛАСК (1:0)",
         pick: "Ф2 (+1.0) · 2.04",
         stakePct: 6,
+        stakeRub: 1026,
         result: "push",
-        delta: 0,
-        gptDelta: 0
+        delta: 0
       },
       {
         day: 3,
@@ -968,9 +985,9 @@
         match: "Комо — АЕК Афины (1:0)",
         pick: "ТМ (3.5) · 1.93",
         stakePct: 3,
+        stakeRub: 513,
         result: "win",
-        delta: 477,
-        gptDelta: 0
+        delta: 477
       },
       {
         day: 4,
@@ -979,9 +996,42 @@
         match: "Атлетико — Викинг (2:0)",
         pick: "ИТМ 1 (3.0) · 2.18",
         stakePct: 3,
+        stakeRub: 528,
         result: "win",
-        delta: 623,
-        gptDelta: 0
+        delta: 623
+      },
+      {
+        day: 5,
+        date: "26.11",
+        league: "Лига Европы",
+        match: "Сельта — Борнмут (1:2)",
+        pick: "ТБ (2.5) · 1.90",
+        stakePct: 3,
+        stakeRub: 512,
+        result: "win",
+        delta: 461
+      },
+      {
+        day: 5,
+        date: "26.11",
+        league: "Лига Европы",
+        match: "Кристал Пэлас — Реал Сосьедад (2:1)",
+        pick: "П1 · 2.06",
+        stakePct: 6,
+        stakeRub: 1092,
+        result: "win",
+        delta: 1158
+      },
+      {
+        day: 5,
+        date: "26.11",
+        league: "Лига Европы",
+        match: "Спарта Прага — АЗ Алкмар (2:4)",
+        pick: "ИТ2 Б (1.5) · 1.96",
+        stakePct: 3,
+        stakeRub: 546,
+        result: "win",
+        delta: 524
       }
     ];
 
@@ -992,8 +1042,10 @@
     const fmtSignedRub = (n) => (n > 0 ? "+" : n < 0 ? "−" : "") + fmtRub(Math.abs(n));
     const fmtK = (n) => Math.round(n / 1000) + "К ₽";
 
-    let chartMode = "model"; // "model" | "duel"
+    let chartMode = "model";
     let matchFilter = "all"; // "all" | "win" | "loss"
+    let showAllMatches = false;
+    const VISIBLE_MATCHES_LIMIT = 5;
 
     function updateCountdown() {
       const target = new Date(CONFIG.finalDateIso).getTime();
@@ -1025,7 +1077,7 @@
           currentDay = mDay;
           dayStartBank = bank;
         }
-        const stakeRub = (dayStartBank * (Number(m.stakePct) || 6)) / 100;
+        const stakeRub = Number(m.stakeRub) || ((dayStartBank * (Number(m.stakePct) || 6)) / 100);
         totalStaked += stakeRub;
         bank += Number(m.delta) || 0;
         gptBank += Number(m.gptDelta) || 0;
@@ -1193,7 +1245,8 @@
         return;
       }
 
-      list.innerHTML = filtered.map((m) => {
+      const visible = showAllMatches ? filtered : filtered.slice(0, VISIBLE_MATCHES_LIMIT);
+      const rowsHtml = visible.map((m) => {
         const cls = m.result === "win" ? "win" : m.result === "loss" ? "loss" : "push";
         const icon = m.result === "win" ? "✅" : m.result === "loss" ? "❌" : "↩️";
         return `
@@ -1210,6 +1263,19 @@
           </div>
         `;
       }).join("");
+
+      const toggleBtnHtml = filtered.length > VISIBLE_MATCHES_LIMIT
+        ? `<button type="button" class="show-more-btn" id="toggleMatchesBtn">${showAllMatches ? "Свернуть историю ↑" : `Показать все матчи (${filtered.length}) ↓`}</button>`
+        : "";
+
+      list.innerHTML = rowsHtml + toggleBtnHtml;
+      const toggleBtn = document.getElementById("toggleMatchesBtn");
+      if (toggleBtn) {
+        toggleBtn.addEventListener("click", () => {
+          showAllMatches = !showAllMatches;
+          renderMatches(state);
+        });
+      }
     }
 
     function initPoll() {
@@ -1249,23 +1315,10 @@
       renderMatches(state);
     }
 
-    document.getElementById("modeModelBtn").addEventListener("click", () => {
-      chartMode = "model";
-      document.getElementById("modeModelBtn").classList.add("active");
-      document.getElementById("modeDuelBtn").classList.remove("active");
-      renderAll();
-    });
-
-    document.getElementById("modeDuelBtn").addEventListener("click", () => {
-      chartMode = "duel";
-      document.getElementById("modeDuelBtn").classList.add("active");
-      document.getElementById("modeModelBtn").classList.remove("active");
-      renderAll();
-    });
-
     document.querySelectorAll(".filter-pill").forEach((btn) => {
       btn.addEventListener("click", () => {
         matchFilter = btn.dataset.filter;
+        showAllMatches = false;
         document.querySelectorAll(".filter-pill").forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
         renderAll();
